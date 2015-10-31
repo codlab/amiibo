@@ -42,7 +42,8 @@ public class AmiiboHelper {
      */
     static byte[] getPage(byte[] data, int page, int number_pages) {
         int byte_read = 4 * number_pages;
-        return Arrays.copyOfRange(data, page * byte_read, (page + 1) * byte_read);
+        int start = page * 4;
+        return Arrays.copyOfRange(data, start, start + byte_read);
     }
 
     /**
@@ -55,7 +56,13 @@ public class AmiiboHelper {
      */
     private static boolean appendPage(SparseArray<byte[]> pages_output,
                                       byte[] array_intput, int page_number) {
-        if (REJECTED_PAGES_TO_WRITE.get(page_number) != null) return false;
+        return appendPage(pages_output, array_intput, page_number, false);
+    }
+
+    private static boolean appendPage(SparseArray<byte[]> pages_output,
+                                      byte[] array_intput, int page_number,
+                                      boolean include_rejected) {
+        if (!include_rejected && REJECTED_PAGES_TO_WRITE.get(page_number) != null) return false;
 
         int i0 = page_number * 4;
         int i1 = i0 + 1;
@@ -86,6 +93,14 @@ public class AmiiboHelper {
             appendPage(pages_output, bytes_input, block);
         }
         return true;
+    }
+
+    public static SparseArray pagesIntoList(byte[] bytes_input) {
+        SparseArray<byte[]> pages_output = new SparseArray<>();
+        for (int i = 0, block = 0; i < bytes_input.length; i += 4, block++) {
+            appendPage(pages_output, bytes_input, block, true);
+        }
+        return pages_output;
     }
 
 

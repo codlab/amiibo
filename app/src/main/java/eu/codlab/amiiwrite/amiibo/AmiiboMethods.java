@@ -1,5 +1,8 @@
 package eu.codlab.amiiwrite.amiibo;
 
+import android.content.Context;
+import android.util.Log;
+
 /**
  * Created by kevinleperf on 30/10/2015.
  */
@@ -26,5 +29,11 @@ public class AmiiboMethods {
     public static byte[] amiiboIdentifier(byte[] read_data) {
         if (read_data == null) return new byte[]{0};
         return AmiiboHelper.getPage(read_data, Constants.AMIIBO_IDENTIFIER_PAGE_1, 2);
+    }
+
+    public static int getAmiiboDrawable(Context context, String amiibo_identifier) {
+        String output = String.format("icon_%s", amiibo_identifier.toLowerCase());
+        Log.d("MainActivity", "output :: " + output);
+        return context.getResources().getIdentifier(output, "drawable", context.getPackageName());
     }
 }

@@ -24,11 +24,11 @@ public class AmiiboIO {
                 password[2],
                 password[3]
         };
-        Log.d("MainActivity", "having auth " + IO.ByteArrayToHexString(auth));
+        Log.d("MainActivity", "having auth " + IO.byteArrayToLoggableHexString(auth));
         byte[] response = new byte[0];
         try {
             response = tag.transceive(auth);
-            Log.d("MainActivity", "having response " + IO.ByteArrayToHexString(response));
+            Log.d("MainActivity", "having response " + IO.byteArrayToLoggableHexString(response));
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -46,7 +46,7 @@ public class AmiiboIO {
             for (int i = 0; i < Constants.MAX_READABLE_PAGES; i += 4) {
                 byte[] write = new byte[]{Constants.COMMAND_READ, (byte) i};
                 byte[] response = null;
-                Log.d("MainActivity", "read I :: " + IO.ByteArrayToHexString(write));
+                Log.d("MainActivity", "read I :: " + IO.byteArrayToLoggableHexString(write));
                 boolean continue_with_except = true;
                 try {
                     response = tag.transceive(write);
@@ -114,7 +114,7 @@ public class AmiiboIO {
                 int page_index = pages.keyAt(key_index);
                 byte[] page = pages.get(page_index);
                 try {
-                    Log.d("MainActivity", "writeNdef pages[I]" + page_index + " :: " + IO.ByteArrayToHexString(page));
+                    Log.d("MainActivity", "writeNdef pages[I]" + page_index + " :: " + IO.byteArrayToLoggableHexString(page));
 
                     byte[] write = tag.transceive(new byte[]{
                             (byte) Constants.COMMAND_WRITE, // COMMAND_WRITE
@@ -124,7 +124,7 @@ public class AmiiboIO {
                             page[2],
                             page[3],
                     });
-                    Log.d("MainActivity", "writeNdef pages[O]" + page_index + " :: " + IO.ByteArrayToHexString(write));
+                    Log.d("MainActivity", "writeNdef pages[O]" + page_index + " :: " + IO.byteArrayToLoggableHexString(write));
                     error = 0;
                 } catch (Exception e) {
                     e.printStackTrace();
