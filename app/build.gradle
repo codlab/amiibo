@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        // required for this library, don't use mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+}
+
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+
 
 android {
     compileSdkVersion 23
@@ -23,4 +35,13 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    compile 'de.greenrobot:eventbus:3.0.0-beta1'
+
+    apt 'com.raizlabs.android:DBFlow-Compiler:2.2.1'
+    compile "com.raizlabs.android:DBFlow-Core:2.2.1"
+    compile "com.raizlabs.android:DBFlow:2.2.1"
+
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
