@@ -47,7 +47,7 @@ import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboFromCategory;
 import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanToWriteFragment;
-import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiibo;
+import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiiboFragment;
 import eu.codlab.amiiwrite.webservice.AmiiboWebsiteController;
 import eu.codlab.amiiwrite.webservice.models.WebsiteInformation;
 import retrofit.Call;
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity
     public void onScanResult(byte[] bytes) {
         if (_stack_controller.head() instanceof ScanFragment) _stack_controller.pop();
 
-        _stack_controller.push(ScannedAmiibo.newInstance(bytes));
+        _stack_controller.push(ScannedAmiiboFragment.newInstance(bytes));
     }
 
     @Override

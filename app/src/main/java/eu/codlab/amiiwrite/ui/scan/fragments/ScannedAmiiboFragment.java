@@ -1,48 +1,61 @@
 package eu.codlab.amiiwrite.ui.scan.fragments;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.data.Blob;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.database.controllers.AmiiboController;
 import eu.codlab.amiiwrite.database.models.Amiibo;
-import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
+import eu.codlab.amiiwrite.ui.information.fragments.AbstractAmiiboInformationFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ScannedAmiibo#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ScannedAmiibo extends StackController.PopableFragment {
+public class ScannedAmiiboFragment extends AbstractAmiiboInformationFragment {
     private static final String DATA_SCANNED = "DATA_SCANNED";
 
+    public static ScannedAmiiboFragment newInstance(byte[] data) {
+        ScannedAmiiboFragment fragment = new ScannedAmiiboFragment();
+        Bundle args = new Bundle();
+        args.putByteArray(DATA_SCANNED, data);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     private Amiibo _tmp_amiibo;
+    private byte[] _data;
 
-    @Bind(R.id.recycler)
-    RecyclerView _recycler;
+    public ScannedAmiiboFragment() {
+    }
 
-    @OnClick(R.id.fab)
-    public void onAddAmiibo() {
+    @Override
+    protected void onFabClicked() {
         _tmp_amiibo = new Amiibo();
         _tmp_amiibo.data = new Blob(_data);
 
         requestAmiiboInformation();
+    }
+
+    @Override
+    public int getResourceLayout() {
+        return R.layout.fragment_scanned_amiibo;
+    }
+
+    @Override
+    public AmiiboAdapter getAdapter() {
+        return new AmiiboAdapter(_data);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            _data = getArguments().getByteArray(DATA_SCANNED);
+        }
     }
 
     private void requestAmiiboInformation() {
@@ -94,43 +107,4 @@ public class ScannedAmiibo extends StackController.PopableFragment {
                 }).show();
     }
 
-    private byte[] _data;
-
-    public ScannedAmiibo() {
-    }
-
-    public static ScannedAmiibo newInstance(byte[] data) {
-        ScannedAmiibo fragment = new ScannedAmiibo();
-        Bundle args = new Bundle();
-        args.putByteArray(DATA_SCANNED, data);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            _data = getArguments().getByteArray(DATA_SCANNED);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_scanned_amiibo, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        ButterKnife.bind(this, view);
-
-        _recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        _recycler.setAdapter(new AmiiboAdapter(_data));
-    }
-
-    @Override
-    public boolean hasParent() {
-        return true;
-    }
 }
