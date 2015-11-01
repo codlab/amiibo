@@ -19,6 +19,7 @@
         android:textSize="@dimen/title_size" />
 
     <LinearLayout
+        android:id="@+id/my_amiibos"
         android:layout_width="match_parent"
         android:layout_height="56dp">
 
@@ -26,11 +27,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
             android:drawableLeft="@drawable/amiibo_icon"
             android:drawablePadding="8dp"
             android:drawableStart="@drawable/amiibo_icon"
-            android:focusable="true"
             android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:text="@string/menu_drawer_my_amiibos" />

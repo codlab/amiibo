@@ -8,4 +8,9 @@
     <string name="waiting_for_scan">Waiting for any amiibo to scan...</string>
     <string name="woops">Woops! Please retry</string>
     <string name="amiibo_void_name">Scanned information</string>
+    <string name="add_amiibo_name_title">Name this amiibo</string>
+    <string name="add_amiibo_name_text">It will help you differentiate this data set from other saved data</string>
+    <string name="add_amiibo_game_name_title">What is its game save ?</string>
+    <string name="add_amiibo_game_name_text">It will help you differentiate this data set from other saved data</string>
+    <string name="canceled">Canceled</string>
 </resources>

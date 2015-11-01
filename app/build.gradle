@@ -1,11 +1,14 @@
 buildscript {
     repositories {
-        // required for this library, don't use mavenCentral()
         jcenter()
     }
     dependencies {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
+}
+
+repositories {
+    maven { url "https://jitpack.io" }
 }
 
 apply plugin: 'com.android.application'
@@ -44,4 +47,11 @@ dependencies {
     compile "com.raizlabs.android:DBFlow:2.2.1"
 
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.0@aar') {
+        transitive = true
+    }
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.0@aar') {
+        transitive = true
+    }
 }

@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="@dimen/activity_vertical_margin"
-    tools:context=".ui.information.AmiiboInformation">
+    tools:context=".ui.information.fragments.AmiiboInformationFragment">
 
     <ImageView
         android:id="@+id/icon"

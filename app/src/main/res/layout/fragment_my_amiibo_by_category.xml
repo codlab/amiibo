@@ -4,12 +4,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.information.fragments.AmiiboInformationFragment">
 
-    <android.support.v7.widget.RecyclerView
+    <eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+    </eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty>
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty"
+        android:visibility="gone" />
 
     <include layout="@layout/fab_add" />
 </FrameLayout>
