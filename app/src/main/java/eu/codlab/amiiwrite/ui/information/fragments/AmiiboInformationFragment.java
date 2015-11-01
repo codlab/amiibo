@@ -23,19 +23,6 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
     private final static String AMIIBO_ID = "AMIIBO_ID";
     private final static String ADD_APPEND = "ADD_APPEND";
 
-
-    @Bind(R.id.recycler)
-    public RecyclerView _recycler;
-
-
-    @OnClick(R.id.fab)
-    public void onClickWriteAmiibo() {
-        EventBus.getDefault().post(new ScanEvent.StartWriteFragment(getAmiiboId()));
-    }
-
-    public AmiiboInformationFragment() {
-    }
-
     public static AmiiboInformationFragment newInstance(Amiibo amiibo, boolean add_fab) {
         AmiiboInformationFragment fragment = new AmiiboInformationFragment();
         Bundle args = new Bundle();
@@ -43,6 +30,17 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
         args.putBoolean(ADD_APPEND, add_fab);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Bind(R.id.recycler)
+    public RecyclerView _recycler;
+
+    @OnClick(R.id.fab)
+    public void onClickWriteAmiibo() {
+        EventBus.getDefault().post(new ScanEvent.StartWriteFragment(getAmiiboId()));
+    }
+
+    public AmiiboInformationFragment() {
     }
 
     @Override
@@ -69,9 +67,12 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
     @Override
     public void onResume() {
         super.onResume();
-
         getActivity().setTitle("");
+    }
 
+    @Override
+    public boolean hasParent() {
+        return true;
     }
 
     private Amiibo getAmiibo() {
@@ -79,18 +80,12 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
     }
 
     private long getAmiiboId() {
-        Bundle args = getArguments();
-        return args != null ? args.getLong(AMIIBO_ID, 0) : 0;
+        return getArguments().getLong(AMIIBO_ID, 0);
     }
 
+    //intended in a later version mixing the after scan information and from saved dump ones
     private boolean showFab() {
-        Bundle args = getArguments();
-        return args != null ? args.getBoolean(ADD_APPEND, false) : false;
+        return getArguments().getBoolean(ADD_APPEND, false);
     }
 
-
-    @Override
-    public boolean hasParent() {
-        return true;
-    }
 }
