@@ -18,4 +18,6 @@
     <string name="menu_drawer_legal">App by codlab. The amiibo belongs to Nintendo, etc... (for more legal, please go to the official amiibo website, they have what you need)</string>
     <string name="menu_drawer_twitter">\@codlab</string>
     <string name="menu_drawer_website">Website</string>
+    <string name="new_version_title">A new version is available</string>
+    <string name="new_version_content">Do you want to download it from the web ?</string>
 </resources>

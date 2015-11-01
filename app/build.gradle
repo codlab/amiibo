@@ -23,13 +23,23 @@ android {
         applicationId "eu.codlab.amiiwrite"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode Integer.parseInt(VERSION_CODE)
+        versionName VERSION_NAME
     }
+    signingConfigs {
+        release {
+            storeFile file(KEYSTORE)
+            storePassword STORE_PASSWORD
+            keyAlias STORE_KEY_ALIAS
+            keyPassword STORE_KEY_ALIAS_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -54,4 +64,7 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.0@aar') {
         transitive = true
     }
+
+    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+    compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
 }
