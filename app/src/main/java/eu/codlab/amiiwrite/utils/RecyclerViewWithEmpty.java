@@ -6,6 +6,11 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
+ * Make a given view visible when no items are available into the recyclerview
+ * <p/>
+ * The given view must be outside of the recyclerview
+ * <p/>
+ * for instance, in a framelayout -> (recyclerview, the view)
  * Created by kevinleperf on 01/11/2015.
  */
 public class RecyclerViewWithEmpty extends RecyclerView {
