@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -41,9 +42,12 @@ import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboByCategoryFragment;
 import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboFromCategory;
 import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
+import eu.codlab.amiiwrite.ui.scan.fragments.ScanToWriteFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiibo;
 
-public class MainActivity extends AppCompatActivity implements ScanFragment.IScanListener {
+public class MainActivity extends AppCompatActivity
+        implements ScanFragment.IScanListener
+        , ScanToWriteFragment.IScanToWriteListener {
     @Bind(R.id.toolbar)
     Toolbar _toolbar;
 
@@ -137,8 +141,12 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
 
             if (_stack_controller != null) {
                 StackController.PopableFragment popable = _stack_controller.head();
-                if (popable != null && popable instanceof ScanFragment) {
-                    ((ScanFragment) popable).tryReadingAmiibo(ntag215, uid);
+                if (popable != null) {
+                    if (popable instanceof ScanFragment) {
+                        ((ScanFragment) popable).tryReadingAmiibo(ntag215, uid);
+                    } else if (popable instanceof ScanToWriteFragment) {
+                        ((ScanToWriteFragment) popable).tryWriteAmiibo(ntag215, uid);
+                    }
                 }
             }
         }
@@ -177,6 +185,12 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onScaningRequested(ScanEvent.StartWriteFragment event) {
+        _stack_controller.push(ScanToWriteFragment.newInstance(event.id));
+        startScanning();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
     public void onCategoriesRequested(EventMyList.EventLoadCategories event) {
         _stack_controller.flush();
         _stack_controller.push(new MyAmiiboByCategoryFragment());
@@ -191,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onAmiiboRequested(EventMyList.EventLoadAmiibo event) {
         Amiibo amiibo = AmiiboController.getInstance().getAmiibo(event.id);
-        _stack_controller.push(AmiiboInformationFragment.newInstance(amiibo, false));
+        _stack_controller.push(AmiiboInformationFragment.newInstance(amiibo, true));
     }
 
     private void opendDrawer() {
@@ -221,5 +235,14 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
         if (_stack_controller.head() instanceof ScanFragment) _stack_controller.pop();
 
         _stack_controller.push(ScannedAmiibo.newInstance(bytes));
+    }
+
+    @Override
+    public void onWriteResult(boolean written) {
+        if (written) {
+            if (_stack_controller.head() instanceof ScanToWriteFragment) _stack_controller.pop();
+            Toast.makeText(this, R.string.written_successfully, Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

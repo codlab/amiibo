@@ -15,7 +15,7 @@ public class AmiiboHelper {
      */
     private static final SparseArray<Boolean> REJECTED_PAGES_TO_WRITE = new SparseArray<>();
 
-    {
+    public static void init() {
         REJECTED_PAGES_TO_WRITE.put(0, true); //UID
         REJECTED_PAGES_TO_WRITE.put(1, true);
         REJECTED_PAGES_TO_WRITE.put(2, true);

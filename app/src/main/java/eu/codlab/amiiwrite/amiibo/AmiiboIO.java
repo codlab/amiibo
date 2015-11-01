@@ -24,11 +24,9 @@ public class AmiiboIO {
                 password[2],
                 password[3]
         };
-        Log.d("MainActivity", "having auth " + IO.byteArrayToLoggableHexString(auth));
         byte[] response = new byte[0];
         try {
             response = tag.transceive(auth);
-            Log.d("MainActivity", "having response " + IO.byteArrayToLoggableHexString(response));
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,7 +91,7 @@ public class AmiiboIO {
         return obtained;
     }
 
-    public static void writeAmiibo(NfcA tag, byte[] bytes) {
+    public static boolean writeAmiibo(NfcA tag, byte[] bytes) {
         for (String string : tag.getTag().getTechList())
             Log.d("MainActivity", "technos " + string);
 
@@ -102,40 +100,44 @@ public class AmiiboIO {
 
 
         try {
-
-            /*
-            Not possible since those configuration pages are write locked
-            setProt(tag, false, 0);
-            setAuth0(tag, 0xff);
-            setLock(tag, false, false, false, false, false, false, false, false);*/
             int error = 0;
 
             for (int key_index = 0; key_index < pages.size(); key_index++) {
+                boolean continue_with_except = true;
+
                 int page_index = pages.keyAt(key_index);
                 byte[] page = pages.get(page_index);
-                try {
-                    Log.d("MainActivity", "writeNdef pages[I]" + page_index + " :: " + IO.byteArrayToLoggableHexString(page));
+                byte[] response = null;
 
-                    byte[] write = tag.transceive(new byte[]{
-                            (byte) Constants.COMMAND_WRITE, // COMMAND_WRITE
-                            (byte) (page_index & 0xff),
-                            page[0],
-                            page[1],
-                            page[2],
-                            page[3],
-                    });
-                    Log.d("MainActivity", "writeNdef pages[O]" + page_index + " :: " + IO.byteArrayToLoggableHexString(write));
-                    error = 0;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.d("", "");
-                    //if we have less then 3 errors OR we already "outreached" the authentication issue
-                    if ((page_index > 5) || error < 3) error++;
-                    else throw new Exception("oops");
+                byte[] write = new byte[]{
+                        Constants.COMMAND_WRITE, // COMMAND_WRITE
+                        (byte) (page_index & 0xff),
+                        page[0],
+                        page[1],
+                        page[2],
+                        page[3],
+                };
+                try {
+                    response = tag.transceive(write);
+                    Log.d("MainActivity", "write O :: " + IO.byteArrayToLoggableHexString(write) + " OK");
+                } catch (TagLostException e) {
+                    response = null;
+                    continue_with_except = false;
+                } catch (IOException e) {
+                    Log.d("MainActivity", "write O :: " + IO.byteArrayToLoggableHexString(write) + " KO");
+                    response = null;
+                }
+
+                if (response != null) {
+
+                } else if (!continue_with_except) {
+                    return false;
+                    //throw new TagLostException("having lost completely the tag");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return true;
     }
 }

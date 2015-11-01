@@ -10,11 +10,14 @@ import android.view.ViewGroup;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.database.controllers.AmiiboController;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
+import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 
 public class AmiiboInformationFragment extends StackController.PopableFragment {
     private final static String AMIIBO_ID = "AMIIBO_ID";
@@ -24,6 +27,11 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
     @Bind(R.id.recycler)
     public RecyclerView _recycler;
 
+
+    @OnClick(R.id.fab)
+    public void onClickWriteAmiibo() {
+        EventBus.getDefault().post(new ScanEvent.StartWriteFragment(getAmiiboId()));
+    }
 
     public AmiiboInformationFragment() {
     }
@@ -75,7 +83,7 @@ public class AmiiboInformationFragment extends StackController.PopableFragment {
         return args != null ? args.getLong(AMIIBO_ID, 0) : 0;
     }
 
-    private boolean showFab(){
+    private boolean showFab() {
         Bundle args = getArguments();
         return args != null ? args.getBoolean(ADD_APPEND, false) : false;
     }

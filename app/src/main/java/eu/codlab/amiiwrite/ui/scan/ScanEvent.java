@@ -19,4 +19,12 @@ public class ScanEvent {
             this.data = data;
         }
     }
+
+    public static class StartWriteFragment {
+        public long id;
+
+        public StartWriteFragment(long id) {
+            this.id = id;
+        }
+    }
 }
