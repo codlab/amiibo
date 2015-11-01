@@ -46,6 +46,12 @@ public class StackController {
         return false;
     }
 
+    public void flush(){
+        while (pop()){
+
+        }
+    }
+
     public void push(PopableFragment new_fragment) {
         _fragments.add(new_fragment);
         setFragment();

@@ -1,4 +1,4 @@
-package eu.codlab.amiiwrite.ui.scan;
+package eu.codlab.amiiwrite.ui.scan.fragments;
 
 import android.content.Context;
 import android.nfc.tech.NfcA;

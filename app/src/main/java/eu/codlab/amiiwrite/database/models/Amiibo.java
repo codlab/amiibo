@@ -19,6 +19,9 @@ public class Amiibo extends BaseModel {
     public String name;
 
     @Column
+    public String uuid;
+
+    @Column
     public String game_name;
 
     @Column

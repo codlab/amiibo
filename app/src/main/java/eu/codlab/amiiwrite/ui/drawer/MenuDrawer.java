@@ -7,11 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 
 public class MenuDrawer extends Fragment {
     public MenuDrawer() {
         // Required empty public constructor
+    }
+
+    @OnClick(R.id.my_amiibos)
+    public void onClickOnMyAmiibo() {
+        EventBus.getDefault().post(new EventMyList.EventLoadCategories());
     }
 
     /**
@@ -41,5 +50,8 @@ public class MenuDrawer extends Fragment {
         return inflater.inflate(R.layout.fragment_menu_drawer, container, false);
     }
 
-
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+    }
 }

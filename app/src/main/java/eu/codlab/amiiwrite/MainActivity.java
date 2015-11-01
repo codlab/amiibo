@@ -24,16 +24,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
+import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.dashboard.DashboardFragment;
+import eu.codlab.amiiwrite.ui.information.fragments.AmiiboInformationFragment;
+import eu.codlab.amiiwrite.ui.my_list.EventMyList;
+import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboByCategoryFragment;
+import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboFromCategory;
 import eu.codlab.amiiwrite.ui.scan.ScanEvent;
-import eu.codlab.amiiwrite.ui.scan.ScanFragment;
-import eu.codlab.amiiwrite.ui.scan.ScannedAmiibo;
+import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
+import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiibo;
 
 public class MainActivity extends AppCompatActivity implements ScanFragment.IScanListener {
     @Bind(R.id.toolbar)
@@ -89,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
     @Override
     protected void onResume() {
         super.onResume();
+
+        List<AmiiboController.AmiiboIdentifiersTuples> tuples = AmiiboController.getInstance()
+                .getListOfIdentifiers();
+        for (AmiiboController.AmiiboIdentifiersTuples tuple : tuples) {
+            Log.d("MainActivity", tuple.identifier + " " + tuple.count);
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -160,6 +174,24 @@ public class MainActivity extends AppCompatActivity implements ScanFragment.ISca
     public void onScaningRequested(ScanEvent.StartFragment event) {
         _stack_controller.push(new ScanFragment());
         startScanning();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onCategoriesRequested(EventMyList.EventLoadCategories event) {
+        _stack_controller.flush();
+        _stack_controller.push(new MyAmiiboByCategoryFragment());
+        closeDrawwer();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onAmiibosRequested(EventMyList.EventLoadAmiibos event) {
+        _stack_controller.push(MyAmiiboFromCategory.newInstance(event.identifier));
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onAmiiboRequested(EventMyList.EventLoadAmiibo event) {
+        Amiibo amiibo = AmiiboController.getInstance().getAmiibo(event.id);
+        _stack_controller.push(AmiiboInformationFragment.newInstance(amiibo, false));
     }
 
     private void opendDrawer() {

@@ -1,8 +1,7 @@
-package eu.codlab.amiiwrite.ui.information;
+package eu.codlab.amiiwrite.ui.information.fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,21 +13,23 @@ import butterknife.ButterKnife;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.database.controllers.AmiiboController;
 import eu.codlab.amiiwrite.database.models.Amiibo;
+import eu.codlab.amiiwrite.ui._stack.StackController;
+import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
 
-public class AmiiboInformation extends Fragment {
+public class AmiiboInformationFragment extends StackController.PopableFragment {
     private final static String AMIIBO_ID = "AMIIBO_ID";
     private final static String ADD_APPEND = "ADD_APPEND";
 
 
     @Bind(R.id.recycler)
-    RecyclerView _recycler;
+    public RecyclerView _recycler;
 
 
-    public AmiiboInformation() {
+    public AmiiboInformationFragment() {
     }
 
-    public static AmiiboInformation newInstance(Amiibo amiibo, boolean add_fab) {
-        AmiiboInformation fragment = new AmiiboInformation();
+    public static AmiiboInformationFragment newInstance(Amiibo amiibo, boolean add_fab) {
+        AmiiboInformationFragment fragment = new AmiiboInformationFragment();
         Bundle args = new Bundle();
         args.putLong(AMIIBO_ID, amiibo.id);
         args.putBoolean(ADD_APPEND, add_fab);
@@ -74,5 +75,14 @@ public class AmiiboInformation extends Fragment {
         return args != null ? args.getLong(AMIIBO_ID, 0) : 0;
     }
 
+    private boolean showFab(){
+        Bundle args = getArguments();
+        return args != null ? args.getBoolean(ADD_APPEND, false) : false;
+    }
 
+
+    @Override
+    public boolean hasParent() {
+        return true;
+    }
 }
