@@ -5,6 +5,6 @@ package eu.codlab.amiiwrite.database.models;
  */
 @com.raizlabs.android.dbflow.annotation.Database(version = Database.VERSION, name = Database.NAME)
 public class Database {
-    public final static int VERSION = 1;
+    public final static int VERSION = 2;
     public final static String NAME = "amiibos";
 }

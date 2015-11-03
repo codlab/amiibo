@@ -15,7 +15,7 @@ import eu.codlab.amiiwrite.ui.my_list.adapters.internal.Container;
 
 /**
  * Show all amiibo in a specific category
- *
+ * <p/>
  * For instance, shows all your Classic Mario dumps
  */
 public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
@@ -26,16 +26,19 @@ public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
 
     @Override
     protected List<Amiibo> getListOfItem() {
-        return AmiiboController.getInstance()
+        List<Amiibo> results = AmiiboController.getInstance()
                 .getAmiibos(getAmiiboIdentifier());
+
+        return results;
     }
 
     @Override
     protected List<Container> itemsToContainers(List<Amiibo> items) {
         List<Container> containers = new ArrayList<>();
 
-        for (Amiibo tuple : items) {
-            containers.add(new AmiiboContainer(tuple.amiibo_identifier, tuple.name, tuple.id));
+        for (Amiibo amiibo : items) {
+            containers.add(new AmiiboContainer(amiibo.amiibo_identifier,
+                    amiibo.name, amiibo.id));
         }
         return containers;
     }

@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
@@ -26,11 +25,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-
-import java.util.List;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
@@ -48,12 +42,6 @@ import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanToWriteFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiiboFragment;
-import eu.codlab.amiiwrite.webservice.AmiiboWebsiteController;
-import eu.codlab.amiiwrite.webservice.models.WebsiteInformation;
-import retrofit.Call;
-import retrofit.Callback;
-import retrofit.Response;
-import retrofit.Retrofit;
 
 public class MainActivity extends AppCompatActivity
         implements ScanFragment.IScanListener
@@ -83,12 +71,6 @@ public class MainActivity extends AppCompatActivity
             }
     };
     private StackController _stack_controller;
-    private AmiiboWebsiteController _website_controller;
-
-    private AmiiboWebsiteController getAmiiboWebsiteController() {
-        if (_website_controller == null) _website_controller = new AmiiboWebsiteController();
-        return _website_controller;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,40 +87,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         initToolbar();
-
-
-        Call<WebsiteInformation> information = getAmiiboWebsiteController().retrieveInformation();
-        information.enqueue(new Callback<WebsiteInformation>() {
-            @Override
-            public void onResponse(Response<WebsiteInformation> response, Retrofit retrofit) {
-                Log.d("MainActivity", "onResponse");
-                if (response != null) {
-                    final WebsiteInformation information = response.body();
-                    Log.d("MainActivity", "onResponse " + information);
-                    if (BuildConfig.VERSION_CODE < information.apk.version) {
-                        new MaterialDialog.Builder(MainActivity.this)
-                                .title(R.string.new_version_title)
-                                .content(R.string.new_version_content)
-                                .positiveText(android.R.string.ok)
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                                    @Override
-                                    public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                                        intent.setData(Uri.parse(information.apk.url));
-                                        startActivity(intent);
-                                    }
-                                })
-                                .show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
-                Log.d("MainActivity", "onResponse " + t);
-            }
-        });
     }
 
     @Override
@@ -151,13 +99,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
-        List<AmiiboController.AmiiboIdentifiersTuples> tuples = AmiiboController.getInstance()
-                .getListOfIdentifiers();
-        for (AmiiboController.AmiiboIdentifiersTuples tuple : tuples) {
-            Log.d("MainActivity", tuple.identifier + " " + tuple.count);
-        }
         EventBus.getDefault().register(this);
+
+        ((ApplicationController) getApplication()).tryUpdateFromNetwork(this);
     }
 
     @Override
@@ -273,7 +217,8 @@ public class MainActivity extends AppCompatActivity
         localIntentFilter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
         localIntentFilter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
         localIntentFilter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
-        NfcAdapter.getDefaultAdapter(this).enableForegroundDispatch(this, localPendingIntent, new IntentFilter[]{localIntentFilter}, this.techList);
+        NfcAdapter.getDefaultAdapter(this).enableForegroundDispatch(this, localPendingIntent,
+                new IntentFilter[]{localIntentFilter}, this.techList);
     }
 
     public void stopScanning() {
@@ -293,6 +238,5 @@ public class MainActivity extends AppCompatActivity
             if (_stack_controller.head() instanceof ScanToWriteFragment) _stack_controller.pop();
             Toast.makeText(this, R.string.written_successfully, Toast.LENGTH_SHORT).show();
         }
-
     }
 }

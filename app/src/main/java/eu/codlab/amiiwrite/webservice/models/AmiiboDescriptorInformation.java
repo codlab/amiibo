@@ -1,5 +1,7 @@
 package eu.codlab.amiiwrite.webservice.models;
 
+import eu.codlab.amiiwrite.database.models.AmiiboDescriptor;
+
 /**
  * Describe a simple amiibo information obtained from the server
  * <p/>
@@ -14,5 +16,12 @@ public class AmiiboDescriptorInformation {
     /**
      * The unique amiibo identifier obtained from there page 22/23
      */
-    public String amiibo_identifier;
+    public String identifier;
+
+    public AmiiboDescriptor asAmiiboDescriptor() {
+        AmiiboDescriptor descriptor = new AmiiboDescriptor();
+        descriptor.name = name;
+        descriptor.amiibo_identifier = identifier;
+        return descriptor;
+    }
 }

@@ -1,7 +1,6 @@
 package eu.codlab.amiiwrite.ui.my_list.fragments;
 
 
-import android.app.Fragment;
 import android.os.Bundle;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import eu.codlab.amiiwrite.ui.my_list.adapters.internal.Container;
 
 /**
  * Show all amiibo categories
- *
+ * <p/>
  * for instance, Classic mario, Bowser, Mr Game And Watch etc...
  * with the number of dumps you have for each
  */
@@ -45,7 +44,7 @@ public class MyAmiiboByCategoryFragment
     protected List<Container> itemsToContainers(List<AmiiboController.AmiiboIdentifiersTuples> items) {
         List<Container> containers = new ArrayList<>();
         for (AmiiboController.AmiiboIdentifiersTuples tuple : items) {
-            containers.add(new Container(tuple.identifier, tuple.identifier, tuple.count));
+            containers.add(new Container(tuple.identifier, tuple.name, tuple.count));
         }
         return containers;
     }

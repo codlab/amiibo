@@ -2,6 +2,7 @@ package eu.codlab.amiiwrite.database.controllers;
 
 import android.database.Cursor;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.ColumnAlias;
@@ -15,6 +16,7 @@ import eu.codlab.amiiwrite.amiibo.AmiiboMethods;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.database.models.Amiibo$Table;
 import eu.codlab.amiiwrite.database.models.AmiiboDescriptor;
+import eu.codlab.amiiwrite.database.models.AmiiboDescriptor$Table;
 import eu.codlab.amiiwrite.utils.IO;
 
 /**
@@ -75,8 +77,17 @@ public class AmiiboController {
         int idx_id = cursor.getColumnIndex(Amiibo$Table.AMIIBO_IDENTIFIER);
 
         while (!cursor.isAfterLast()) {
-            AmiiboIdentifiersTuples tuple = new AmiiboIdentifiersTuples(cursor.getString(idx_id),
+            //change the identifier 00000000000 into the "human readable name"
+            //not done into the sql query since the controller will cache the descriptor for later use
+            String identifier = cursor.getString(idx_id);
+            String amiibo_name = identifier;
+            AmiiboDescriptor descriptor = getAmiiboDescriptor(identifier);
+            if (descriptor != null) amiibo_name = descriptor.name;
+
+            AmiiboIdentifiersTuples tuple = new AmiiboIdentifiersTuples(identifier, amiibo_name,
                     cursor.getLong(idx_count));
+
+            Log.d("AmiiboController", "adding row " + tuple.identifier + " " + tuple.name + " " + tuple.count);
             list.add(tuple);
             cursor.moveToNext();
         }
@@ -85,21 +96,63 @@ public class AmiiboController {
         return list;
     }
 
-    public List<AmiiboDescriptor> getAmiiboDescriptor() {
-        return new Select()
+    public void updateAmiiboDescriptor(AmiiboDescriptor descriptor) {
+        if (descriptor == null) return;
+
+        AmiiboDescriptor previous = new Select()
                 .from(AmiiboDescriptor.class)
-                .queryList();
+                .where(Condition.column(AmiiboDescriptor$Table.AMIIBO_IDENTIFIER)
+                        .eq(descriptor.amiibo_identifier.toLowerCase()))
+                .querySingle();
+        if (previous == null) {
+            previous = descriptor;
+            descriptor.insert();
+        } else {
+            previous.amiibo_identifier = descriptor.amiibo_identifier.toLowerCase();
+            previous.name = descriptor.name;
+            previous.update();
+        }
+
+        updateCache(previous, true);
+
+    }
+
+    public AmiiboDescriptor getAmiiboDescriptor(String identifier) {
+        AmiiboDescriptor descriptor = _cache_amiibo_descriptor.get(identifier);
+        if (descriptor == null) {
+            identifier = identifier.toLowerCase();
+            descriptor = new Select()
+                    .from(AmiiboDescriptor.class)
+                    .where(Condition.column(AmiiboDescriptor$Table.AMIIBO_IDENTIFIER).eq(identifier))
+                    .querySingle();
+
+            updateAmiiboDescriptor(descriptor);
+
+            Log.d("AmiiboController", "trying to look for " + identifier);
+            if (descriptor != null)
+                Log.d("AmiiboController", "having description " + descriptor.amiibo_identifier);
+        }
+        return descriptor;
     }
 
 
     public static class AmiiboIdentifiersTuples {
         public String identifier;
+        public String name;
         public long count;
 
-        public AmiiboIdentifiersTuples(String identifier, long count) {
+        public AmiiboIdentifiersTuples(String identifier, String name, long count) {
             this.identifier = identifier;
             this.count = count;
+            this.name = name;
         }
+    }
+
+    private void updateCache(AmiiboDescriptor amiibo_descriptor, boolean force) {
+        if (force ||
+                (amiibo_descriptor != null
+                        && _cache_amiibo_descriptor.get(amiibo_descriptor.amiibo_identifier) == null))
+            _cache_amiibo_descriptor.put(amiibo_descriptor.amiibo_identifier, amiibo_descriptor);
     }
 
     private void updateCache(Amiibo amiibo) {
@@ -107,6 +160,7 @@ public class AmiiboController {
             _cache.put(amiibo.id, amiibo);
     }
 
+    private LruCache<String, AmiiboDescriptor> _cache_amiibo_descriptor = new LruCache<>(200);
     private LruCache<Long, Amiibo> _cache = new LruCache<>(500);
 
 }

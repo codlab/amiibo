@@ -6,6 +6,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+
 /**
  * Created by kevinleperf on 31/10/2015.
  */
@@ -35,4 +37,14 @@ public class Amiibo extends BaseModel {
 
     @Column
     public Blob data;
+
+    private AmiiboDescriptor descriptor;
+
+
+    public AmiiboDescriptor getDescriptor() {
+        if (descriptor == null) {
+            descriptor = AmiiboController.getInstance().getAmiiboDescriptor(amiibo_identifier);
+        }
+        return descriptor;
+    }
 }
