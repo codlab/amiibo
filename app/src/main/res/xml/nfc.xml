@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tech-list>
+    <tech>android.nfc.tech.NfcA</tech>
+    <tech>android.nfc.tech.MifareClassic</tech>
+    <tech>android.nfc.tech.Ultralight</tech>
+    <tech>android.nfc.tech.NdefFormatable</tech>
+</tech-list>

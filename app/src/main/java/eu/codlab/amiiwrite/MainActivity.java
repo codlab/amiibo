@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity
         EventBus.getDefault().register(this);
 
         ((ApplicationController) getApplication()).tryUpdateFromNetwork(this);
+
+        checkIntentForPushFragment();
     }
 
     @Override
@@ -124,6 +126,20 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void checkIntentForPushFragment() {
+        if (hasNfc())
+            _stack_controller.push(new ScanFragment());
+/*        if (hasNfc()) {
+            onScaningRequested(new ScanEvent.StartFragment());
+        }*/
+    }
+
+    private boolean hasNfc() {
+        Intent intent = getIntent();
+        return intent.hasExtra(NfcAdapter.EXTRA_TAG)
+                && intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) != null;
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     protected void onNewIntent(Intent paramIntent) {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(paramIntent.getAction())) {
@@ -143,6 +159,18 @@ public class MainActivity extends AppCompatActivity
                     }
                 }
             }
+        } else {
+            setIntent(paramIntent);
+        }
+    }
+
+    public void cleanIntent() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(NfcAdapter.EXTRA_TAG)) {
+            intent.removeExtra(NfcAdapter.EXTRA_TAG);
+        }
+        if (intent.hasExtra(NfcAdapter.EXTRA_ID)) {
+            intent.removeExtra(NfcAdapter.EXTRA_ID);
         }
     }
 
@@ -211,18 +239,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void startScanning() {
-        PendingIntent localPendingIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, getClass()).addFlags(PendingIntent.FLAG_NO_CREATE), 0);
-        IntentFilter localIntentFilter = new IntentFilter();
-        localIntentFilter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
-        localIntentFilter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        localIntentFilter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
-        NfcAdapter.getDefaultAdapter(this).enableForegroundDispatch(this, localPendingIntent,
-                new IntentFilter[]{localIntentFilter}, this.techList);
+        if (NfcAdapter.getDefaultAdapter(this) != null) {
+            PendingIntent localPendingIntent = PendingIntent.getActivity(this, 0,
+                    new Intent(this, getClass()).addFlags(PendingIntent.FLAG_NO_CREATE), 0);
+            IntentFilter localIntentFilter = new IntentFilter();
+            localIntentFilter.addAction(NfcAdapter.ACTION_TAG_DISCOVERED);
+            localIntentFilter.addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            localIntentFilter.addAction(NfcAdapter.ACTION_TECH_DISCOVERED);
+            NfcAdapter.getDefaultAdapter(this).enableForegroundDispatch(this, localPendingIntent,
+                    new IntentFilter[]{localIntentFilter}, this.techList);
+        }
+
+        if (hasNfc()) {
+            onNewIntent(getIntent());
+        }
     }
 
     public void stopScanning() {
-        NfcAdapter.getDefaultAdapter(this).disableForegroundDispatch(this);
+        if (NfcAdapter.getDefaultAdapter(this) != null)
+            NfcAdapter.getDefaultAdapter(this).disableForegroundDispatch(this);
     }
 
     @Override

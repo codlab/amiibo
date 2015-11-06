@@ -91,6 +91,7 @@ public class ApplicationController extends Application {
                                     public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
                                         Intent intent = new Intent(Intent.ACTION_VIEW);
                                         intent.setData(Uri.parse(information.apk.url));
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                         startActivity(intent);
                                     }
                                 })
