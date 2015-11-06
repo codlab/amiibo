@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">AmiiWrite</string>
+
+    <string name="menu_drawer_my_amiibos">Mes Amiibos</string>
+    <string name="pages_header">Contenu de la puce NFC :</string>
+    <string name="waiting_for_scan">En attente d\'un Amiibo à lire...</string>
+    <string name="woops">Oops! Veuillez réessayer</string>
+    <string name="amiibo_void_name">Informations</string>
+    <string name="add_amiibo_name_title">Nom du amiibo</string>
+    <string name="scan_an_amiibo">Scanner un amiibo</string>
+    <string name="add_amiibo_name_text">Cela servira à différencier ses données d\'un autre</string>
+    <string name="add_amiibo_game_name_title">Quel est son jeu ?</string>
+    <string name="add_amiibo_game_name_text">It will help you differentiate this data set from other saved data</string>
+    <string name="canceled">Annulé</string>
+    <string name="written_successfully">L\'amiibo a bien été sauvegardé</string>
+    <string name="menu_drawer_github">Code Source</string>
+    <string name="menu_drawer_legal">App by codlab. The amiibo belongs to Nintendo, etc... (for more legal, please go to the official amiibo website, they have what you need)</string>
+    <string name="menu_drawer_twitter">\@codlab</string>
+    <string name="menu_drawer_website">Site web</string>
+    <string name="new_version_title">Une nouvelle version est disponible</string>
+    <string name="new_version_content">Voulez-vous télécharger la version depuis le web ?</string>
+</resources>
