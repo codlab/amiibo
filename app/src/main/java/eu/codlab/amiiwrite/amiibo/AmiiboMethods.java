@@ -1,14 +1,24 @@
 package eu.codlab.amiiwrite.amiibo;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
+
+import java.util.Arrays;
 
 /**
  * Created by kevinleperf on 30/10/2015.
  */
 public class AmiiboMethods {
+    private static byte[] ERROR = new byte[]{0};
 
-    public static byte[] keygen(byte[] uuid) {
+    public static boolean isError(@Nullable byte[] check) {
+        return check == null || Arrays.equals(check, ERROR);
+    }
+
+    @NonNull
+    public static byte[] keygen(@NonNull byte[] uuid) {
         byte[] key = new byte[4];
         int[] uuid_to_ints = new int[uuid.length];
 
@@ -23,17 +33,18 @@ public class AmiiboMethods {
             return key;
         }
 
-        return null;
+        return ERROR;
     }
 
-    public static byte[] amiiboIdentifier(byte[] read_data) {
-        if (read_data == null) return new byte[]{0};
+    @NonNull
+    public static byte[] amiiboIdentifier(@Nullable byte[] read_data) {
+        if (read_data == null) return ERROR;
         return AmiiboHelper.getPage(read_data, Constants.AMIIBO_IDENTIFIER_PAGE_1, 2);
     }
 
-    public static int getAmiiboDrawable(Context context, String amiibo_identifier) {
+    public static int getAmiiboDrawable(@NonNull Context context,
+                                        @NonNull String amiibo_identifier) {
         String output = String.format("icon_%s", amiibo_identifier.toLowerCase());
-        Log.d("MainActivity", "output :: " + output);
         return context.getResources().getIdentifier(output, "drawable", context.getPackageName());
     }
 }

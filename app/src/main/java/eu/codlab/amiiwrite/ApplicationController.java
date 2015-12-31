@@ -16,7 +16,7 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.amiibo.AmiiboHelper;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.events.PostRefreshAmiibos;
 import eu.codlab.amiiwrite.webservice.AmiiboWebsiteController;
 import eu.codlab.amiiwrite.webservice.models.AmiiboDescriptorInformation;
@@ -122,8 +122,8 @@ public class ApplicationController extends Application {
         if (list != null) {
             for (AmiiboDescriptorInformation amiibo : list) {
                 Log.d("ApplicationController", "writing amiibo " + amiibo.identifier + " " + amiibo.name);
-                AmiiboController.getInstance()
-                        .updateAmiiboDescriptor(amiibo.asAmiiboDescriptor());
+                AmiiboFactory.getAmiiboDescriptorCache()
+                        .updateInDatabase(amiibo.asAmiiboDescriptor());
             }
         }
     }

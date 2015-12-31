@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
+import eu.codlab.amiiwrite.database.holders.AmiiboIdentifiersHolder;
 import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 import eu.codlab.amiiwrite.ui.my_list.adapters.internal.Container;
 
@@ -18,7 +19,7 @@ import eu.codlab.amiiwrite.ui.my_list.adapters.internal.Container;
  * with the number of dumps you have for each
  */
 public class MyAmiiboByCategoryFragment
-        extends AbstractMyAmiiboFragment<AmiiboController.AmiiboIdentifiersTuples> {
+        extends AbstractMyAmiiboFragment<AmiiboIdentifiersHolder> {
     public MyAmiiboByCategoryFragment() {
     }
 
@@ -36,14 +37,14 @@ public class MyAmiiboByCategoryFragment
     }
 
     @Override
-    protected List<AmiiboController.AmiiboIdentifiersTuples> getListOfItem() {
-        return AmiiboController.getInstance().getListOfIdentifiers();
+    protected List<AmiiboIdentifiersHolder> getListOfItem() {
+        return AmiiboFactory.getAmiiboDescriptorCache().getListOfIdentifiers();
     }
 
     @Override
-    protected List<Container> itemsToContainers(List<AmiiboController.AmiiboIdentifiersTuples> items) {
+    protected List<Container> itemsToContainers(List<AmiiboIdentifiersHolder> items) {
         List<Container> containers = new ArrayList<>();
-        for (AmiiboController.AmiiboIdentifiersTuples tuple : items) {
+        for (AmiiboIdentifiersHolder tuple : items) {
             containers.add(new Container(tuple.identifier, tuple.name, tuple.count));
         }
         return containers;

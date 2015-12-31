@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 import eu.codlab.amiiwrite.ui.my_list.adapters.internal.AmiiboContainer;
@@ -26,7 +26,7 @@ public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
 
     @Override
     protected List<Amiibo> getListOfItem() {
-        List<Amiibo> results = AmiiboController.getInstance()
+        List<Amiibo> results = AmiiboFactory.getAmiiboCache()
                 .getAmiibos(getAmiiboIdentifier());
 
         return results;

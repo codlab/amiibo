@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
 import eu.codlab.amiiwrite.ui.scan.ScanEvent;
@@ -41,7 +41,7 @@ public class AmiiboInformationFragment extends AbstractAmiiboInformationFragment
 
 
     private Amiibo getAmiibo() {
-        return AmiiboController.getInstance().getAmiibo(getAmiiboId());
+        return AmiiboFactory.getAmiiboCache().getFromKey(getAmiiboId());
     }
 
     private long getAmiiboId() {

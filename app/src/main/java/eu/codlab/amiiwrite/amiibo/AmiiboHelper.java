@@ -1,5 +1,6 @@
 package eu.codlab.amiiwrite.amiibo;
 
+import android.support.annotation.NonNull;
 import android.util.SparseArray;
 
 import java.util.Arrays;
@@ -40,7 +41,8 @@ public class AmiiboHelper {
      * @param number_pages
      * @return
      */
-    static byte[] getPage(byte[] data, int page, int number_pages) {
+    @NonNull
+    static byte[] getPage(@NonNull byte[] data, int page, int number_pages) {
         int byte_read = 4 * number_pages;
         int start = page * 4;
         return Arrays.copyOfRange(data, start, start + byte_read);

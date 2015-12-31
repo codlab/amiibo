@@ -10,7 +10,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.data.Blob;
 
 import eu.codlab.amiiwrite.R;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
 import eu.codlab.amiiwrite.ui.information.fragments.AbstractAmiiboInformationFragment;
@@ -90,7 +90,7 @@ public class ScannedAmiiboFragment extends AbstractAmiiboInformationFragment {
                             if (_tmp_amiibo.game_name == null) {
                                 requestAmiiboInformation();
                             } else {
-                                AmiiboController.getInstance().insertAmiibo(_tmp_amiibo);
+                                AmiiboFactory.getAmiiboCache().updateInDatabase(_tmp_amiibo);
                                 _tmp_amiibo = null;
                             }
                         }

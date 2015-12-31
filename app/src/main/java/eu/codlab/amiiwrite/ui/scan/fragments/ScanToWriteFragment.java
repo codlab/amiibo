@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import eu.codlab.amiiwrite.MainActivity;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.amiibo.AmiiboIO;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 
@@ -115,8 +115,8 @@ public class ScanToWriteFragment extends StackController.PopableFragment {
     }
 
     private Amiibo getAmiibo() {
-        return AmiiboController.getInstance()
-                .getAmiibo(getArguments().getLong(AMIIBO_ID, 0));
+        return AmiiboFactory.getAmiiboCache()
+                .getFromKey(getArguments().getLong(AMIIBO_ID, 0));
     }
 
     public interface IScanToWriteListener {

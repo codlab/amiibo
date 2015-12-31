@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
-import eu.codlab.amiiwrite.database.controllers.AmiiboController;
+import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.dashboard.DashboardFragment;
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity
 
     @Subscribe(threadMode = ThreadMode.MainThread)
     public void onAmiiboRequested(EventMyList.EventLoadAmiibo event) {
-        Amiibo amiibo = AmiiboController.getInstance().getAmiibo(event.id);
+        Amiibo amiibo = AmiiboFactory.getAmiiboCache().getFromKey(event.id);
         _stack_controller.push(AmiiboInformationFragment.newInstance(amiibo, true));
     }
 
