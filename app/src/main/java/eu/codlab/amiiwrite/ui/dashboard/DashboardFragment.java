@@ -9,10 +9,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 
-public class DashboardFragment extends StackController.PopableFragment {
+public class DashboardFragment extends PopableFragment {
     public DashboardFragment() {
         // Required empty public constructor
     }

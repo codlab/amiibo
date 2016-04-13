@@ -16,9 +16,10 @@ import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.amiibo.AmiiboIO;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 
-public class ScanToWriteFragment extends StackController.PopableFragment {
+public class ScanToWriteFragment extends PopableFragment {
     private final static String AMIIBO_ID = "AMIIBO_ID";
 
     private IScanToWriteListener _scan_listener;
@@ -99,6 +100,7 @@ public class ScanToWriteFragment extends StackController.PopableFragment {
                 boolean result = AmiiboIO.writeAmiibo(ntag215, getAmiibo().data.getBlob());
 
                 _scan_listener.onWriteResult(result);
+                read_successfully = result;
             }
         } catch (IOException e) {
             e.printStackTrace();

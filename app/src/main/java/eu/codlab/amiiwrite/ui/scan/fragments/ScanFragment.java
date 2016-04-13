@@ -14,9 +14,10 @@ import butterknife.ButterKnife;
 import eu.codlab.amiiwrite.MainActivity;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.amiibo.AmiiboIO;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 
-public class ScanFragment extends StackController.PopableFragment {
+public class ScanFragment extends PopableFragment {
 
     private ScanFragment.IScanListener _scan_listener;
 

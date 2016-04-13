@@ -15,6 +15,7 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.my_list.adapters.AmiiboListAdapter;
 import eu.codlab.amiiwrite.ui.my_list.adapters.IAmiiboListListener;
@@ -25,7 +26,7 @@ import eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty;
 /**
  * Created by kevinleperf on 01/11/2015.
  */
-public abstract class AbstractMyAmiiboFragment<T> extends StackController.PopableFragment
+public abstract class AbstractMyAmiiboFragment<T> extends PopableFragment
         implements IAmiiboListListener {
 
     @Bind(R.id.empty)

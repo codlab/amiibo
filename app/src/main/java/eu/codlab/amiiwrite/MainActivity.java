@@ -32,6 +32,7 @@ import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.dashboard.DashboardFragment;
 import eu.codlab.amiiwrite.ui.information.fragments.AmiiboInformationFragment;
@@ -129,9 +130,6 @@ public class MainActivity extends AppCompatActivity
     private void checkIntentForPushFragment() {
         if (hasNfc())
             _stack_controller.push(new ScanFragment());
-/*        if (hasNfc()) {
-            onScaningRequested(new ScanEvent.StartFragment());
-        }*/
     }
 
     private boolean hasNfc() {
@@ -150,7 +148,7 @@ public class MainActivity extends AppCompatActivity
             NfcA ntag215 = NfcA.get(tag);
 
             if (_stack_controller != null) {
-                StackController.PopableFragment popable = _stack_controller.head();
+                PopableFragment popable = _stack_controller.head();
                 if (popable != null) {
                     if (popable instanceof ScanFragment) {
                         ((ScanFragment) popable).tryReadingAmiibo(ntag215, uid);

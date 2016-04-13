@@ -12,13 +12,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.ui._stack.PopableFragment;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
 
 /**
  * Created by kevinleperf on 01/11/2015.
  */
-public abstract class AbstractAmiiboInformationFragment extends StackController.PopableFragment {
+public abstract class AbstractAmiiboInformationFragment extends PopableFragment {
     protected abstract int getResourceLayout();
 
     protected abstract void onFabClicked();
