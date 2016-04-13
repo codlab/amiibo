@@ -1,20 +1,21 @@
 package eu.codlab.amiiwrite.ui._stack;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.codlab.amiiwrite.BuildConfig;
 import eu.codlab.amiiwrite.MainActivity;
 
 /**
  * Created by kevinleperf on 31/10/2015.
  */
 public class StackController {
-    public static abstract class PopableFragment extends Fragment {
-        public abstract boolean hasParent();
-    }
 
     private MainActivity _parent;
     private View _container;
@@ -24,7 +25,8 @@ public class StackController {
 
     }
 
-    public StackController(MainActivity parent, View received) {
+    public StackController(@NonNull MainActivity parent, @NonNull View received) {
+        this();
         _fragments = new ArrayList<>();
         _container = received;
         _parent = parent;
@@ -46,13 +48,13 @@ public class StackController {
         return false;
     }
 
-    public void flush(){
-        while (pop()){
-
+    public void flush() {
+        while (pop()) {
+            if (BuildConfig.DEBUG) Log.d("StackController", "popping");
         }
     }
 
-    public void push(PopableFragment new_fragment) {
+    public void push(@NonNull PopableFragment new_fragment) {
         _fragments.add(new_fragment);
         setFragment();
     }
@@ -66,6 +68,7 @@ public class StackController {
         _parent.invalidateToolbar();
     }
 
+    @Nullable
     public PopableFragment head() {
         if (_fragments.size() > 0)
             return _fragments.get(_fragments.size() - 1);
@@ -73,8 +76,7 @@ public class StackController {
     }
 
     public boolean hasParent() {
-        if (head() != null)
-            return head().hasParent();
-        return false;
+        PopableFragment fragment = head();
+        return fragment != null && fragment.hasParent();
     }
 }
