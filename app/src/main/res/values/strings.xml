@@ -19,4 +19,7 @@
     <string name="menu_drawer_website">Website</string>
     <string name="new_version_title">A new version is available</string>
     <string name="new_version_content">Do you want to download it from the web ?</string>
+    <string name="uploading">Uploading...</string>
+    <string name="menu_drawer_sync_drive">Sync Google Drive</string>
+    <string name="sync_with_drive">Sync with your Google Drive account</string>
 </resources>

@@ -1,0 +1,4 @@
+<resources>
+    <integer name="amiibo_columns">12</integer>
+    <integer name="amiibo_columns_with_content">4</integer>
+</resources>

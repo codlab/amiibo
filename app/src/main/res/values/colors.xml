@@ -6,6 +6,9 @@
     <color name="colorPrimaryText">@color/primary_text</color>
     <color name="colorAccent">@color/accent</color>
     <color name="black">@android:color/black</color>
+    <color name="black_transparent">#66000000</color>
     <color name="white">@android:color/white</color>
+    <color name="grey">#e7e7e7</color>
     <color name="red">#ff2e2e</color>
+    <color name="transparent">#00000000</color>
 </resources>
