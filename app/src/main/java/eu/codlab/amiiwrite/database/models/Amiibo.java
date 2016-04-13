@@ -1,5 +1,7 @@
 package eu.codlab.amiiwrite.database.models;
 
+import android.support.annotation.Nullable;
+
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
@@ -41,6 +43,7 @@ public class Amiibo extends BaseModel {
     private AmiiboDescriptor descriptor;
 
 
+    @Nullable
     public AmiiboDescriptor getDescriptor() {
         if (descriptor == null) {
             descriptor = AmiiboFactory.getAmiiboDescriptorCache()
