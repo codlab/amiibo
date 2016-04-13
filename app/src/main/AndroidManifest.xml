@@ -27,6 +27,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <service android:name=".sync.SyncService" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a28e99cb06f914cb4242b1a0c75e627ef72db534" />
     </application>
 
     <uses-feature

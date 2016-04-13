@@ -32,8 +32,11 @@ import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.database.controllers.AmiiboController;
 import eu.codlab.amiiwrite.database.models.Amiibo;
+import eu.codlab.amiiwrite.sync.SyncService;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.dashboard.DashboardFragment;
+import eu.codlab.amiiwrite.ui.drive.DriveEvent;
+import eu.codlab.amiiwrite.ui.drive.fragments.DriveFragment;
 import eu.codlab.amiiwrite.ui.information.fragments.AmiiboInformationFragment;
 import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboByCategoryFragment;
@@ -42,6 +45,7 @@ import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanToWriteFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiiboFragment;
+import hugo.weaving.DebugLog;
 
 public class MainActivity extends AppCompatActivity
         implements ScanFragment.IScanListener
@@ -87,15 +91,20 @@ public class MainActivity extends AppCompatActivity
         }
 
         initToolbar();
+
+        SyncService.start(this);
     }
 
     @Override
     public void onBackPressed() {
+        if (_stack_controller.managedOnBackPressed()) return;
+
         if (!_stack_controller.pop()) {
             super.onBackPressed();
         }
     }
 
+    @DebugLog
     @Override
     protected void onResume() {
         super.onResume();
@@ -106,6 +115,7 @@ public class MainActivity extends AppCompatActivity
         checkIntentForPushFragment();
     }
 
+    @DebugLog
     @Override
     protected void onPause() {
         EventBus.getDefault().unregister(this);
@@ -117,6 +127,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (_stack_controller.managedOnBackPressed()) return true;
+
                 if (!_stack_controller.pop()) {
                     opendDrawer();
                 }
@@ -127,17 +139,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void checkIntentForPushFragment() {
-        if (hasNfc())
-            _stack_controller.push(new ScanFragment());
-/*        if (hasNfc()) {
-            onScaningRequested(new ScanEvent.StartFragment());
-        }*/
+        if (hasNfc()) _stack_controller.push(new ScanFragment());
     }
 
     private boolean hasNfc() {
         Intent intent = getIntent();
         return intent.hasExtra(NfcAdapter.EXTRA_TAG)
                 && intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) != null;
+    }
+
+    @DebugLog
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        boolean managed = false;
+        if (_stack_controller != null && _stack_controller.head() instanceof DriveFragment) {
+            managed = ((DriveFragment) _stack_controller.head()).onResult(requestCode,
+                    resultCode, data);
+        }
+
+        if (!managed) super.onActivityResult(requestCode, resultCode, data);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -198,6 +218,12 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onDriveRequested(DriveEvent.StartFragment event) {
+        _stack_controller.push(new DriveFragment());
+        closeDrawwer();
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
@@ -272,6 +298,12 @@ public class MainActivity extends AppCompatActivity
         if (written) {
             if (_stack_controller.head() instanceof ScanToWriteFragment) _stack_controller.pop();
             Toast.makeText(this, R.string.written_successfully, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void startSync() {
+        if (SyncService.getInstance().isFinished()) {
+            SyncService.getInstance().init();
         }
     }
 }

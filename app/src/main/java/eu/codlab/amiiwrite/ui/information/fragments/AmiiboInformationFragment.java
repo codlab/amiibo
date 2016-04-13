@@ -47,4 +47,9 @@ public class AmiiboInformationFragment extends AbstractAmiiboInformationFragment
     private long getAmiiboId() {
         return getArguments().getLong(AMIIBO_ID, 0);
     }
+
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
+    }
 }

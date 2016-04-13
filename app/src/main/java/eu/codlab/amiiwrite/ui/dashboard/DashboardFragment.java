@@ -59,4 +59,9 @@ public class DashboardFragment extends StackController.PopableFragment {
     public boolean hasParent() {
         return false;
     }
+
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
+    }
 }

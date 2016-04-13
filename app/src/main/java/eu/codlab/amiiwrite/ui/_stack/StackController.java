@@ -14,6 +14,8 @@ import eu.codlab.amiiwrite.MainActivity;
 public class StackController {
     public static abstract class PopableFragment extends Fragment {
         public abstract boolean hasParent();
+
+        public abstract boolean managedOnBackPressed();
     }
 
     private MainActivity _parent;
@@ -75,6 +77,12 @@ public class StackController {
     public boolean hasParent() {
         if (head() != null)
             return head().hasParent();
+        return false;
+    }
+
+    public boolean managedOnBackPressed(){
+        if(head() != null)
+            return head().managedOnBackPressed();
         return false;
     }
 }

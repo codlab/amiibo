@@ -28,4 +28,16 @@ public class EventMyList {
             this.id = id;
         }
     }
+
+    public static class EventFetch {
+        public String class_name;
+
+        private EventFetch() {
+
+        }
+
+        public EventFetch(String class_name) {
+            this.class_name = class_name;
+        }
+    }
 }

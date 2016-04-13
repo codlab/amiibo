@@ -24,6 +24,15 @@ public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
     public MyAmiiboFromCategory() {
     }
 
+    public static MyAmiiboFromCategory newInstance(String amiibo_id) {
+        MyAmiiboFromCategory fragment = new MyAmiiboFromCategory();
+        Bundle args = new Bundle();
+        args.putString(AMIIBO_IDENTIFIER, amiibo_id);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+
     @Override
     protected List<Amiibo> getListOfItem() {
         List<Amiibo> results = AmiiboController.getInstance()
@@ -43,12 +52,14 @@ public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
         return containers;
     }
 
-    public static MyAmiiboFromCategory newInstance(String amiibo_id) {
-        MyAmiiboFromCategory fragment = new MyAmiiboFromCategory();
-        Bundle args = new Bundle();
-        args.putString(AMIIBO_IDENTIFIER, amiibo_id);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    protected boolean isCorrectInstance(Object object) {
+        return object != null && object instanceof Amiibo;
+    }
+
+    @Override
+    protected Class<? extends Amiibo> getImplementationClass() {
+        return Amiibo.class;
     }
 
     @Override
@@ -57,7 +68,18 @@ public class MyAmiiboFromCategory extends AbstractMyAmiiboFragment<Amiibo> {
         EventBus.getDefault().post(new EventMyList.EventLoadAmiibo(item.data));
     }
 
+    public boolean isFromIdentifier(String identifier) {
+        if (identifier != null)
+            return identifier.equalsIgnoreCase(getAmiiboIdentifier());
+        return false;
+    }
+
     private String getAmiiboIdentifier() {
         return getArguments().getString(AMIIBO_IDENTIFIER, "");
+    }
+
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
     }
 }

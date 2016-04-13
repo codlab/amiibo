@@ -44,6 +44,11 @@ public class ScanFragment extends StackController.PopableFragment {
     }
 
     @Override
+    public boolean managedOnBackPressed() {
+        return false;
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).startScanning();
