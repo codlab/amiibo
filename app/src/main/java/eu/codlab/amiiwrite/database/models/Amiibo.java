@@ -35,6 +35,9 @@ public class Amiibo extends BaseModel {
     @Column
     public String amiibo_identifier;
 
+    @Column(defaultValue = "false")
+    public boolean synced;
+
     @Column
     public Blob data;
 

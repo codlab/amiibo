@@ -38,6 +38,16 @@ public class AmiiboController {
         return amiibo;
     }
 
+    public Amiibo getAmiibo(String uuid) {
+        uuid = uuid.toLowerCase();
+        Amiibo amiibo = new Select()
+                .from(Amiibo.class)
+                .where(Condition.column(Amiibo$Table.UUID).eq(uuid))
+                .querySingle();
+        updateCache(amiibo);
+        return amiibo;
+    }
+
     public List<Amiibo> getAmiibos(String amiibo_identifier) {
         List<Amiibo> amiibos = new Select()
                 .from(Amiibo.class)
@@ -50,7 +60,20 @@ public class AmiiboController {
         return amiibos;
     }
 
-    public void insertAmiibo(Amiibo amiibo) {
+    public List<Amiibo> getAmiibosUnsynced() {
+        List<Amiibo> amiibos = new Select()
+                .from(Amiibo.class)
+                .where(Condition.CombinedCondition
+                        .begin(Condition.column(Amiibo$Table.SYNCED).eq(false))
+                        .or(Condition.column(Amiibo$Table.SYNCED).isNull()))
+                .queryList();
+
+        for (Amiibo amiibo : amiibos) updateCache(amiibo);
+
+        return amiibos;
+    }
+
+    public void updateAmiibo(Amiibo amiibo) {
         byte[] identifiers = AmiiboMethods.amiiboIdentifier(amiibo.data.getBlob());
 
         //set the identifier as the readable representation from the available pages
@@ -61,7 +84,11 @@ public class AmiiboController {
         //create and uuid from the amiibo, to make easier share/cloud storage
         if (amiibo.uuid == null) amiibo.uuid = UUID.randomUUID().toString();
 
-        amiibo.insert();
+        amiibo.update();
+    }
+
+    public void insertAmiibo(Amiibo amiibo) {
+        updateAmiibo(amiibo);
     }
 
     public List<AmiiboIdentifiersTuples> getListOfIdentifiers() {
@@ -135,6 +162,12 @@ public class AmiiboController {
         return descriptor;
     }
 
+    public void setUploaded(String uuid, boolean b) {
+        Amiibo amiibo = getAmiibo(uuid);
+        amiibo.synced = b;
+        updateAmiibo(amiibo);
+    }
+
 
     public static class AmiiboIdentifiersTuples {
         public String identifier;
@@ -156,11 +189,16 @@ public class AmiiboController {
     }
 
     private void updateCache(Amiibo amiibo) {
-        if (amiibo != null && _cache.get(amiibo.id) == null)
+        if (amiibo != null && _cache.get(amiibo.id) == null) {
             _cache.put(amiibo.id, amiibo);
+        }
+        if (amiibo != null && _cache_string.get(amiibo.uuid) == null) {
+            _cache_string.put(amiibo.uuid, amiibo);
+        }
     }
 
     private LruCache<String, AmiiboDescriptor> _cache_amiibo_descriptor = new LruCache<>(200);
     private LruCache<Long, Amiibo> _cache = new LruCache<>(500);
+    private LruCache<String, Amiibo> _cache_string = new LruCache<>(500);
 
 }
