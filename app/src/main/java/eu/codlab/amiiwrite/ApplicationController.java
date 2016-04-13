@@ -48,7 +48,7 @@ public class ApplicationController extends Application {
         super.onCreate();
 
         _updated = false;
-        _in_update = false;
+        setInUpdate(false);
 
         //init the database orm
         FlowManager.init(this);
@@ -68,10 +68,10 @@ public class ApplicationController extends Application {
     }
 
     public void tryUpdateFromNetwork(final Activity activity) {
-        if (_in_update || _updated) return;
+        if (isInUpdate() || _updated) return;
 
         //prevent back into the method -- not threadsafe for 2 instr, but nvm
-        _in_update = true;
+        setInUpdate(true);
 
         Call<WebsiteInformation> information = getAmiiboWebsiteController().retrieveInformation();
         information.enqueue(new Callback<WebsiteInformation>() {
@@ -98,7 +98,7 @@ public class ApplicationController extends Application {
                                 .show();
 
                     }
-                    _in_update = false;
+                    setInUpdate(false);
                     _updated = true;
 
                     mApplicationBus.post(new PostRefreshAmiibos(information.amiibos));
@@ -109,7 +109,7 @@ public class ApplicationController extends Application {
             public void onFailure(Throwable t) {
                 t.printStackTrace();
                 Log.d("MainActivity", "onResponse " + t);
-                _in_update = false;
+                setInUpdate(false);
                 _updated = false;
             }
         });
@@ -126,5 +126,13 @@ public class ApplicationController extends Application {
                         .updateInDatabase(amiibo.asAmiiboDescriptor());
             }
         }
+    }
+
+    public boolean isInUpdate(){
+        return _in_update;
+    }
+
+    private void setInUpdate(boolean state){
+        _in_update = state;
     }
 }
