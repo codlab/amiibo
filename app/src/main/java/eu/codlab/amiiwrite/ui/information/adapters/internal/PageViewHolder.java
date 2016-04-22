@@ -24,12 +24,13 @@ public class PageViewHolder extends BindableViewHolder {
         if (position == 0) header.setVisibility(View.VISIBLE);
         else header.setVisibility(View.GONE);
 
-        data.setText(IO.byteArrayToLoggableHexString(amiiboAdapter.getObject(position)));
+        byte[] bytes = amiiboAdapter.getObject(getItemViewType(), position);
+        data.setText(IO.byteArrayToLoggableHexString(bytes));
     }
 
     @Override
     public int getDelta() {
-        return 2;
+        return 0;
     }
 
     public PageViewHolder(View itemView) {

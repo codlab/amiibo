@@ -8,6 +8,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.data.Blob;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import eu.codlab.amiiwrite.amiitool.AmiitoolFactory;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 
 /**
@@ -53,5 +54,10 @@ public class Amiibo extends BaseModel {
                     .getFromKey(amiibo_identifier);
         }
         return descriptor;
+    }
+
+    public byte[] decrypt() {
+        return AmiitoolFactory.getInstance()
+                .unpack(this);
     }
 }

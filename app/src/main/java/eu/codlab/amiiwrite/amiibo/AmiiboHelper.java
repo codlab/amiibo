@@ -97,7 +97,7 @@ public class AmiiboHelper {
         return true;
     }
 
-    public static SparseArray pagesIntoList(byte[] bytes_input) {
+    public static SparseArray<byte[]> pagesIntoList(byte[] bytes_input) {
         SparseArray<byte[]> pages_output = new SparseArray<>();
         for (int i = 0, block = 0; i < bytes_input.length; i += 4, block++) {
             appendPage(pages_output, bytes_input, block, true);

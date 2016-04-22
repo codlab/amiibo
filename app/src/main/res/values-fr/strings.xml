@@ -3,6 +3,7 @@
 
     <string name="menu_drawer_my_amiibos">Mes Amiibos</string>
     <string name="pages_header">Contenu de la puce NFC :</string>
+    <string name="pages_header_decrypted">Contenu de la puce NFC : (déchiffré)</string>
     <string name="waiting_for_scan">En attente d\'un Amiibo à lire...</string>
     <string name="woops">Oops! Veuillez réessayer</string>
     <string name="amiibo_void_name">Informations</string>

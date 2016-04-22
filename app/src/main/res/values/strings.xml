@@ -3,6 +3,7 @@
 
     <string name="menu_drawer_my_amiibos">My amiibos</string>
     <string name="pages_header">NFC chip content :</string>
+    <string name="pages_header_decrypted">NFC chip content : (decyphered)</string>
     <string name="waiting_for_scan">Waiting for any amiibo to scan...</string>
     <string name="woops">Woops! Please retry</string>
     <string name="amiibo_void_name">Scanned information</string>

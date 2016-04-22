@@ -2,9 +2,11 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin_mid">8dp</dimen>
     <dimen name="title_size">36sp</dimen>
     <dimen name="amiibo_width">64dp</dimen>
     <dimen name="amiibo_height">70dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
 
     <integer name="amiibo_columns">3</integer>
     <integer name="amiibo_columns_with_content">1</integer>

@@ -3,8 +3,6 @@ package eu.codlab.amiiwrite.amiitool;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.Arrays;
-
 import eu.codlab.amiitool.AmiiTool;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 
@@ -28,13 +26,18 @@ public class AmiitoolFactory {
         mAmiitool = new AmiiTool(context);
     }
 
-    public void unpack(Amiibo amiibo) {
+    public byte[] unpack(Amiibo amiibo) {
         byte[] encrypted = amiibo.data.getBlob();
+        return unpack(encrypted);
+    }
+
+    public byte[] unpack(byte[] encrypted) {
         byte[] decrypted = new byte[encrypted.length];
         mAmiitool.unpack(encrypted, encrypted.length, decrypted, decrypted.length);
 
         Log.d("AmiitoolFactory", "encrypted := " + byteArrayToHex(encrypted));
         Log.d("AmiitoolFactory", "decrypted := " + byteArrayToHex(decrypted));
+        return decrypted;
     }
 
     public static String byteArrayToHex(byte[] a) {
