@@ -46,6 +46,7 @@ import eu.codlab.amiiwrite.ui.scan.ScanEvent;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScanToWriteFragment;
 import eu.codlab.amiiwrite.ui.scan.fragments.ScannedAmiiboFragment;
+import hugo.weaving.DebugLog;
 
 public class MainActivity extends AppCompatActivity
         implements ScanFragment.IScanListener
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @DebugLog
     @Override
     protected void onResume() {
         super.onResume();
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity
         checkIntentForPushFragment();
     }
 
+    @DebugLog
     @Override
     protected void onPause() {
         EventBus.getDefault().unregister(this);

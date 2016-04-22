@@ -26,7 +26,6 @@ import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.events.SyncResult;
 import eu.codlab.amiiwrite.sync.SyncService;
 import eu.codlab.amiiwrite.ui._stack.PopableFragment;
-import eu.codlab.amiiwrite.ui._stack.StackController;
 import hugo.weaving.DebugLog;
 
 public class DriveFragment extends PopableFragment

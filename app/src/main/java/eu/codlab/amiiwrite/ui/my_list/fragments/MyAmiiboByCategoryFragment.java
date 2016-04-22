@@ -83,7 +83,6 @@ public class MyAmiiboByCategoryFragment
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         _grid.setRecyclerColumnsListener(this);
         _grid.setRecyclerAdapter(this);
     }
@@ -163,7 +162,6 @@ public class MyAmiiboByCategoryFragment
         if (object instanceof Amiibo) identifier = ((Amiibo) object).amiibo_identifier;
         else if (object instanceof AmiiboIdentifiersHolder)
             identifier = ((AmiiboIdentifiersHolder) object).identifier;
-
 
         MyAmiiboFromCategory fragment = (MyAmiiboFromCategory) getChildFragmentManager().findFragmentByTag("CONTENT");
 

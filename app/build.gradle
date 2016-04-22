@@ -73,6 +73,7 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
         transitive = true
     }
+
     compile 'eu.codlab:android_multicolumn_adaptable:1.8'
     compile 'eu.codlab:amiitool_android:0.2.2'
 
