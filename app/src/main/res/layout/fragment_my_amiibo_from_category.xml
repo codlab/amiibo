@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    tools:context=".ui.information.fragments.AmiiboInformationFragment">
+
+    <eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty>
+
+    <include
+        android:id="@+id/empty"
+        layout="@layout/empty"
+        android:visibility="gone" />
+
+    <!--<include layout="@layout/fab_add" />-->
+
+    <View
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/gradient_black_transparent_from_left" />
+</FrameLayout>

@@ -1,17 +1,17 @@
 package eu.codlab.amiiwrite.ui.my_list.adapters.internal;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import eu.codlab.amiiwrite.R;
 import eu.codlab.amiiwrite.amiibo.AmiiboMethods;
+import eu.codlab.amiiwrite.database.holders.AmiiboIdentifiersHolder;
 import eu.codlab.amiiwrite.ui.my_list.adapters.AmiiboListAdapter;
-import eu.codlab.amiiwrite.ui.my_list.adapters.IAmiiboListListener;
 
 /**
  * Created by kevinleperf on 01/11/2015.
@@ -34,23 +34,18 @@ public class AmiiboCategory extends LoadableHolder {
     @Bind(R.id.count)
     public TextView count;
 
-    @OnClick(R.id.clickable)
-    public void onClickableClicked() {
-        _listener.onClick(_container);
-    }
+    @Bind(R.id.clickable)
+    public View _clickable;
 
     @Nullable
     private Container _container;
-    private IAmiiboListListener _listener;
+    private String TAG = AmiiboCategory.class.getSimpleName();
 
     @Override
-    public void onBindViewHolder(AmiiboListAdapter parent, int position) {
+    public void onBindViewHolder(final AmiiboListAdapter parent, int position) {
         _container = parent.getObject(position);
-        _listener = parent.getListener();
 
-        boolean is_last = position + 1 >= parent.getItemCount();
-        header.setVisibility(position == 0 ? View.VISIBLE : View.GONE);
-        footer.setVisibility(is_last ? View.VISIBLE : View.GONE);
+        updateHeaderFooter(parent, position);
 
         name.setText(_container.name);
         if (count != null) count.setText(Long.toString(_container.data));
@@ -60,6 +55,35 @@ public class AmiiboCategory extends LoadableHolder {
             icon.setImageResource(drawable);
         }
 
+        _clickable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (parent.getListener() != null)
+                    parent.getListener().onClick(_container);
+            }
+        });
+    }
+
+    public void onBindViewHolder(AmiiboIdentifiersHolder parent,
+                                 View.OnClickListener listener) {
+        name.setText(parent.name);
+        if (count != null) count.setText(Long.toString(parent.count));
+
+        int drawable = AmiiboMethods.getAmiiboDrawable(itemView.getContext(), parent.identifier);
+        Log.d(TAG, "onBindViewHolder: " + parent.identifier + " " + parent.name + " " + drawable);
+        if (drawable != 0) {
+            icon.setImageResource(drawable);
+        }
+
+        _clickable.setOnClickListener(listener);
+
+        updateHeaderFooter(null, -1);
+    }
+
+
+    protected void updateHeaderFooter(final AmiiboListAdapter parent, int position) {
+        header.setVisibility(View.GONE);
+        footer.setVisibility(View.GONE);
     }
 
     public AmiiboCategory(View itemView) {

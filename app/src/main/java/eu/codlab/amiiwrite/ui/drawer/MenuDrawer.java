@@ -13,6 +13,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.ui.drive.DriveEvent;
 import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 
 public class MenuDrawer extends Fragment {
@@ -27,6 +28,11 @@ public class MenuDrawer extends Fragment {
     @OnClick(R.id.my_amiibos)
     public void onClickOnMyAmiibo() {
         EventBus.getDefault().post(new EventMyList.EventLoadCategories());
+    }
+
+    @OnClick(R.id.sync_drive)
+    public void onClickOnSyncDrive() {
+        EventBus.getDefault().post(new DriveEvent.StartFragment());
     }
 
     @OnClick(R.id.twitter)

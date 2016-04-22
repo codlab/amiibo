@@ -41,6 +41,18 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="8dp"
                 android:text="@string/menu_drawer_my_amiibos" />
+
+            <TextView
+                android:id="@+id/sync_drive"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:drawableLeft="@drawable/google_drive_icon"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/google_drive_icon"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:text="@string/menu_drawer_sync_drive" />
         </LinearLayout>
 
         <TextView

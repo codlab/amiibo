@@ -11,7 +11,6 @@ public class Container {
     public long data;
 
     public Container(String identifier, String name, long data) {
-        Log.d("Container", "creating container " + identifier + " " + name + " " + data);
         this.name = name;
         this.identifier = identifier;
         this.data = data;

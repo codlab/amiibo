@@ -1,15 +1,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.information.fragments.AmiiboInformationFragment">
 
-    <eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </eu.codlab.amiiwrite.utils.RecyclerViewWithEmpty>
+    <eu.codlab.recyclercolumnadaptable.RecyclerColumnsWithContentView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:columns="@integer/amiibo_columns"
+        android:overScrollMode="never"
+        app:columnsVisibleExpanded="@integer/amiibo_columns_with_content" />
 
     <include
         android:id="@+id/empty"

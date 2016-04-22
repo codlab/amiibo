@@ -33,8 +33,11 @@ import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui._stack.PopableFragment;
+import eu.codlab.amiiwrite.sync.SyncService;
 import eu.codlab.amiiwrite.ui._stack.StackController;
 import eu.codlab.amiiwrite.ui.dashboard.DashboardFragment;
+import eu.codlab.amiiwrite.ui.drive.DriveEvent;
+import eu.codlab.amiiwrite.ui.drive.fragments.DriveFragment;
 import eu.codlab.amiiwrite.ui.information.fragments.AmiiboInformationFragment;
 import eu.codlab.amiiwrite.ui.my_list.EventMyList;
 import eu.codlab.amiiwrite.ui.my_list.fragments.MyAmiiboByCategoryFragment;
@@ -88,10 +91,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         initToolbar();
+
+        SyncService.start(this);
     }
 
     @Override
     public void onBackPressed() {
+        if (_stack_controller.managedOnBackPressed()) return;
+
         if (!_stack_controller.pop()) {
             super.onBackPressed();
         }
@@ -118,6 +125,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                if (_stack_controller.managedOnBackPressed()) return true;
+
                 if (!_stack_controller.pop()) {
                     opendDrawer();
                 }
@@ -136,6 +145,17 @@ public class MainActivity extends AppCompatActivity
         Intent intent = getIntent();
         return intent.hasExtra(NfcAdapter.EXTRA_TAG)
                 && intent.getParcelableExtra(NfcAdapter.EXTRA_TAG) != null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        boolean managed = false;
+        if (_stack_controller != null && _stack_controller.head() instanceof DriveFragment) {
+            managed = ((DriveFragment) _stack_controller.head()).onResult(requestCode,
+                    resultCode, data);
+        }
+
+        if (!managed) super.onActivityResult(requestCode, resultCode, data);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -196,6 +216,12 @@ public class MainActivity extends AppCompatActivity
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MainThread)
+    public void onDriveRequested(DriveEvent.StartFragment event) {
+        _stack_controller.push(new DriveFragment());
+        closeDrawwer();
     }
 
     @Subscribe(threadMode = ThreadMode.MainThread)
@@ -270,6 +296,12 @@ public class MainActivity extends AppCompatActivity
         if (written) {
             if (_stack_controller.head() instanceof ScanToWriteFragment) _stack_controller.pop();
             Toast.makeText(this, R.string.written_successfully, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void startSync() {
+        if (SyncService.getInstance().isFinished()) {
+            SyncService.getInstance().init();
         }
     }
 }

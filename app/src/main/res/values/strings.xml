@@ -1,14 +1,13 @@
 <resources>
     <string name="app_name">AmiiWrite</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="menu_drawer_my_amiibos">My amiibos</string>
-    <string name="pages_header">Contenu de la puce NFC :</string>
+    <string name="pages_header">NFC chip content :</string>
     <string name="waiting_for_scan">Waiting for any amiibo to scan...</string>
     <string name="woops">Woops! Please retry</string>
     <string name="amiibo_void_name">Scanned information</string>
     <string name="add_amiibo_name_title">Name this amiibo</string>
+    <string name="scan_an_amiibo">Scan an amiibo</string>
     <string name="add_amiibo_name_text">It will help you differentiate this data set from other saved data</string>
     <string name="add_amiibo_game_name_title">What is its game save ?</string>
     <string name="add_amiibo_game_name_text">It will help you differentiate this data set from other saved data</string>
@@ -20,4 +19,7 @@
     <string name="menu_drawer_website">Website</string>
     <string name="new_version_title">A new version is available</string>
     <string name="new_version_content">Do you want to download it from the web ?</string>
+    <string name="uploading">Uploading...</string>
+    <string name="menu_drawer_sync_drive">Sync Google Drive</string>
+    <string name="sync_with_drive">Sync with your Google Drive account</string>
 </resources>

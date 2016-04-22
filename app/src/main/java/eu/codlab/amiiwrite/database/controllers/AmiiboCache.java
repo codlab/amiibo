@@ -19,6 +19,20 @@ import eu.codlab.amiiwrite.utils.IO;
  */
 public class AmiiboCache extends AbstractCacheable<Long, Amiibo> {
 
+
+    public List<Amiibo> getAmiibosUnsynced() {
+        List<Amiibo> amiibos = new Select()
+                .from(Amiibo.class)
+                .where(Condition.CombinedCondition
+                        .begin(Condition.column(Amiibo$Table.SYNCED).eq(false))
+                        .or(Condition.column(Amiibo$Table.SYNCED).isNull()))
+                .queryList();
+
+        for (Amiibo amiibo : amiibos) updateCache(amiibo, true);
+
+        return amiibos;
+    }
+
     @NonNull
     public List<Amiibo> getAmiibos(String amiibo_identifier) {
         amiibo_identifier = amiibo_identifier.toLowerCase();
@@ -31,6 +45,20 @@ public class AmiiboCache extends AbstractCacheable<Long, Amiibo> {
         for (Amiibo amiibo : amiibos) updateCache(amiibo, true);
 
         return amiibos;
+    }
+
+    @NonNull
+    public Amiibo getAmiibo(String amiibo_uuid) {
+        amiibo_uuid = amiibo_uuid.toLowerCase();
+        Amiibo amiibo = new Select()
+                .from(Amiibo.class)
+                .where(Condition.column(Amiibo$Table.UUID).eq(amiibo_uuid))
+                .querySingle();
+
+        if (amiibo != null)
+            updateCache(amiibo, true);
+
+        return amiibo;
     }
 
     @Nullable
@@ -65,4 +93,28 @@ public class AmiiboCache extends AbstractCacheable<Long, Amiibo> {
 
         return object;
     }
+
+    public void setUploaded(String uuid, boolean b) {
+        Amiibo amiibo = getAmiibo(uuid);
+        amiibo.synced = b;
+        updateAmiibo(amiibo);
+    }
+
+
+    public void updateAmiibo(Amiibo amiibo) {
+        byte[] identifiers = AmiiboMethods.amiiboIdentifier(amiibo.data.getBlob());
+
+        //set the identifier as the readable representation from the available pages
+        amiibo.amiibo_identifier = IO.byteArrayToHexString(identifiers);
+        //lower case the amiibo identifier to make research for more efficient
+        amiibo.amiibo_identifier = amiibo.amiibo_identifier.toLowerCase();
+
+        //create and uuid from the amiibo, to make easier share/cloud storage
+        if (amiibo.uuid == null) amiibo.uuid = UUID.randomUUID().toString();
+
+        amiibo.update();
+        updateCache(amiibo, true);
+    }
+
+
 }

@@ -3,7 +3,6 @@ package eu.codlab.amiiwrite.database.controllers;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.language.ColumnAlias;
@@ -69,7 +68,7 @@ public class AmiiboDescriptorCache extends AbstractCacheable<String, AmiiboDescr
 
     @Override
     protected void updateCache(@NonNull AmiiboDescriptor amiibo_descriptor,
-                            boolean force) {
+                               boolean force) {
         String amiibo_identifier = amiibo_descriptor.amiibo_identifier;
         if (force || null == getCache().get(amiibo_identifier))
             getCache().put(amiibo_identifier, amiibo_descriptor);

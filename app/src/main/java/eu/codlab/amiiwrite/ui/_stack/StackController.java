@@ -79,4 +79,10 @@ public class StackController {
         PopableFragment fragment = head();
         return fragment != null && fragment.hasParent();
     }
+
+    public boolean managedOnBackPressed(){
+        if(head() != null)
+            return head().managedOnBackPressed();
+        return false;
+    }
 }

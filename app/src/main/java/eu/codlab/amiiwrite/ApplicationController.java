@@ -8,6 +8,8 @@ import android.util.Log;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import java.util.List;
@@ -16,11 +18,13 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import de.greenrobot.event.ThreadMode;
 import eu.codlab.amiiwrite.amiibo.AmiiboHelper;
+import eu.codlab.amiiwrite.amiitool.AmiitoolFactory;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.events.PostRefreshAmiibos;
 import eu.codlab.amiiwrite.webservice.AmiiboWebsiteController;
 import eu.codlab.amiiwrite.webservice.models.AmiiboDescriptorInformation;
 import eu.codlab.amiiwrite.webservice.models.WebsiteInformation;
+import io.fabric.sdk.android.Fabric;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -46,6 +50,7 @@ public class ApplicationController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics(), new Answers());
 
         _updated = false;
         setInUpdate(false);
@@ -59,6 +64,8 @@ public class ApplicationController extends Application {
         mApplicationBus = EventBus.builder().build();
 
         mApplicationBus.register(this);
+
+        AmiitoolFactory.getInstance().init(this);
     }
 
     @Override
@@ -128,11 +135,11 @@ public class ApplicationController extends Application {
         }
     }
 
-    public boolean isInUpdate(){
+    public boolean isInUpdate() {
         return _in_update;
     }
 
-    private void setInUpdate(boolean state){
+    private void setInUpdate(boolean state) {
         _in_update = state;
     }
 }

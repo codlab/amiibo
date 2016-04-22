@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".ui.information.fragments.AmiiboInformationFragment">
+
+    <View
+        android:id="@+id/header"
+        android:layout_width="1px"
+        android:layout_height="4dp" />
+
+    <LinearLayout
+        android:id="@+id/clickable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:background="?android:attr/selectableItemBackground"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="4dp"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="4dp"
+        tools:context=".ui.information.fragments.AmiiboInformationFragment">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="@dimen/amiibo_width"
+            android:layout_height="@dimen/amiibo_height"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:src="@drawable/icon_00070000001a0002" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Some amiibo" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/footer"
+        android:layout_width="1px"
+        android:layout_height="4dp" />
+</LinearLayout>

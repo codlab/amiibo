@@ -3,4 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="title_size">36sp</dimen>
+    <dimen name="amiibo_width">64dp</dimen>
+    <dimen name="amiibo_height">70dp</dimen>
+
+    <integer name="amiibo_columns">3</integer>
+    <integer name="amiibo_columns_with_content">1</integer>
 </resources>

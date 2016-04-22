@@ -60,4 +60,9 @@ public class DashboardFragment extends PopableFragment {
     public boolean hasParent() {
         return false;
     }
+
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
+    }
 }

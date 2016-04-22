@@ -107,4 +107,8 @@ public class ScannedAmiiboFragment extends AbstractAmiiboInformationFragment {
                 }).show();
     }
 
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
+    }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import de.greenrobot.event.EventBus;
 import eu.codlab.amiiwrite.R;
+import eu.codlab.amiiwrite.amiitool.AmiitoolFactory;
 import eu.codlab.amiiwrite.database.controllers.AmiiboFactory;
 import eu.codlab.amiiwrite.database.models.Amiibo;
 import eu.codlab.amiiwrite.ui.information.adapters.AmiiboAdapter;
@@ -14,6 +15,7 @@ public class AmiiboInformationFragment extends AbstractAmiiboInformationFragment
     private final static String AMIIBO_ID = "AMIIBO_ID";
 
     public static AmiiboInformationFragment newInstance(Amiibo amiibo, boolean add_fab) {
+        AmiitoolFactory.getInstance().unpack(amiibo);
         AmiiboInformationFragment fragment = new AmiiboInformationFragment();
         Bundle args = new Bundle();
         args.putLong(AMIIBO_ID, amiibo.id);
@@ -46,5 +48,10 @@ public class AmiiboInformationFragment extends AbstractAmiiboInformationFragment
 
     private long getAmiiboId() {
         return getArguments().getLong(AMIIBO_ID, 0);
+    }
+
+    @Override
+    public boolean managedOnBackPressed() {
+        return false;
     }
 }
